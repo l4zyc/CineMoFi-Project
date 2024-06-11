@@ -144,77 +144,33 @@ INSERT INTO PurchaseHeader VALUES
     ('PU014', 'SU002', 'ST009', '2021-06-29'),
     ('PU015', 'SU006', 'ST008', '2019-10-23')
 
-CREATE TABLE PurchaseDetailFood(
+CREATE TABLE PurchaseDetail(
 	PurchaseID CHAR(5) FOREIGN KEY REFERENCES PurchaseHeader(PurchaseID) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL, 
 	FoodID CHAR(5) FOREIGN KEY REFERENCES MsFood(FoodID) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
-	FoodQtyPurchase INT NOT NULL,
-	PRIMARY KEY(PurchaseID)
-)
-
-INSERT INTO PurchaseDetailFood VALUES
-    ('PU001', 'FO001', 13),
-    ('PU002', 'FO002', 12),
-    ('PU003', 'FO001', 10),
-    ('PU004', 'FO009', 10),
-    ('PU005', 'FO005', 09),
-    ('PU006', 'FO006', 08),
-    ('PU007', 'FO001', 29),
-    ('PU008', 'FO010', 23),
-    ('PU009', 'FO010', 22),
-    ('PU010', 'FO005', 03),
-    ('PU011', 'FO005', 34),
-    ('PU012', 'FO003', 29),
-    ('PU013', 'FO010', 22),
-    ('PU014', 'FO002', 17),
-    ('PU015', 'FO005', 06)
-
-CREATE TABLE PurchaseDetailMovie(
-	PurchaseID CHAR(5) FOREIGN KEY REFERENCES PurchaseHeader(PurchaseID) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
-	MovieID CHAR(5) FOREIGN KEY REFERENCES MsMovie(MovieID) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
-	PRIMARY KEY(PurchaseID)
-)
-
-INSERT INTO PurchaseDetailMovie VALUES 
-    ('PU001', 'MO001'),
-    ('PU002', 'MO010'),
-    ('PU003', 'MO006'),
-    ('PU004', 'MO009'),
-    ('PU005', 'MO001'),
-    ('PU006', 'MO008'),
-    ('PU007', 'MO007'),
-    ('PU008', 'MO004'),
-    ('PU009', 'MO001'),
-    ('PU010', 'MO001'),
-    ('PU011', 'MO002'),
-    ('PU012', 'MO005'),
-    ('PU013', 'MO003'),
-    ('PU014', 'MO001'),
-    ('PU015', 'MO002');
-
-CREATE TABLE PurchaseDetailDrink(
-	PurchaseID CHAR(5) FOREIGN KEY REFERENCES PurchaseHeader(PurchaseID) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
 	DrinkID CHAR(5) FOREIGN KEY REFERENCES MsDrink(DrinkID) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
-	DrinkQtyPurchase INT NOT NULL,
+	MovieID CHAR(5) FOREIGN KEY REFERENCES MsMovie(MovieID) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+	FoodQtyPurchase INT NOT NULL,
+	DrinkQtyPurchase INT NOT NULL
 	PRIMARY KEY(PurchaseID)
 )
 
+INSERT INTO PurchaseDetail VALUES
+    ('PU001', 'FO001', 'DR006', 'MO001', 20, 2),
+    ('PU002', 'FO002', 'DR006', 'MO002', 10, 3),
+    ('PU003', 'FO001', 'DR001', 'MO003', 50, 4),
+    ('PU004', 'FO009', 'DR010', 'MO004', 35, 5),
+    ('PU005', 'FO005', 'DR006', 'MO006', 20, 6),
+    ('PU006', 'FO006', 'DR006', 'MO001', 10, 7),
+    ('PU007', 'FO001', 'DR008', 'MO007', 15, 8),
+    ('PU008', 'FO010', 'DR002', 'MO010', 30, 2),
+    ('PU009', 'FO010', 'DR005', 'MO007', 70, 3),
+    ('PU010', 'FO005', 'DR005', 'MO008', 70, 10),
+    ('PU011', 'FO005', 'DR005', 'MO005', 10, 5),
+    ('PU012', 'FO003', 'DR004', 'MO001', 20, 7),
+    ('PU013', 'FO010', 'DR004', 'MO002', 15, 8),
+    ('PU014', 'FO002', 'DR001', 'MO006', 10, 9),
+    ('PU015', 'FO005', 'DR001', 'MO005', 10, 4)
 
-INSERT INTO PurchaseDetailDrink VALUES 
-    ('PU001', 'DR006', 13),
-    ('PU002', 'DR006', 11),
-    ('PU003', 'DR001', 10),
-    ('PU004', 'DR010', 04),
-    ('PU005', 'DR006', 05),
-    ('PU006', 'DR006', 02),
-    ('PU007', 'DR008', 21),
-    ('PU008', 'DR002', 21),
-    ('PU009', 'DR001', 28),
-    ('PU010', 'DR005', 07),
-    ('PU011', 'DR008', 35),
-    ('PU012', 'DR004', 28),
-    ('PU013', 'DR004', 26),
-    ('PU014', 'DR002', 02),
-    ('PU015', 'DR001', 02)
 
 CREATE TABLE TransactionHeader(
 	TransactionID CHAR(5) PRIMARY KEY CHECK(TransactionID LIKE 'TR[0-9][0-9][0-9]'),

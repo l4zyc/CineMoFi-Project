@@ -6,10 +6,10 @@ GO
 -- Display Staffs (Obtained from StaffName in uppercase), PurchaseDate, and Total Food Purchase
 -- (Obtained from counting all the Transaction) for every Purchase made by male staff and happenned in 2019.
 
-SELECT UPPER(StaffName) AS 'Staff Name', PurchaseDate, SUM(pdf.FoodQtyPurchase) as 'Total Food Purchase' 
+SELECT UPPER(StaffName) AS 'Staff Name', PurchaseDate, SUM(pd.FoodQtyPurchase) as 'Total Food Purchase' 
 FROM MsStaff ms 
 JOIN PurchaseHeader ph ON ms.StaffID = ph.StaffID
-JOIN PurchaseDetailFood pdf ON ph.PurchaseID = pdf.PurchaseID
+JOIN PurchaseDetail pd ON ph.PurchaseID = pd.PurchaseID
 WHERE StaffGender = 'Male' AND YEAR(PurchaseDate) = 2019
 GROUP BY StaffName, PurchaseDate
 
@@ -19,11 +19,11 @@ GROUP BY StaffName, PurchaseDate
 -- for every Total Drink Purchase that less than 5 and PurchaseID is even number.
 
 SELECT PH.PurchaseID, LOWER(ms.SupplierName) AS 'Supplier Name', 
-SUM(PurchaseDetailDrink.DrinkQtyPurchase) AS [Total Drink Purchase]
-FROM PurchaseHeader  PH
+SUM(pd.DrinkQtyPurchase) AS [Total Drink Purchase]
+FROM PurchaseHeader PH
 JOIN MsSupplier ms ON PH.SupplierID = ms.SupplierID
-JOIN PurchaseDetailDrink ON PurchaseDetailDrink.PurchaseID = PH.PurchaseID
-WHERE PurchaseDetailDrink.DrinkQtyPurchase < 5
+JOIN PurchaseDetail pd ON pd.PurchaseID = PH.PurchaseID
+WHERE pd.DrinkQtyPurchase < 5
     AND CONVERT(INT, SUBSTRING(PH.PurchaseID, 3, LEN(PH.PurchaseID))) % 2 = 0
 GROUP BY PH.PurchaseID, ms.SupplierName
 
@@ -50,15 +50,15 @@ GROUP BY TransactionDate
 -- average), and Total Food Purchased (Obtained from total sum of FoodQuantity) for every 
 -- purchase that has average food quantity is more than 2 and the FoodCategory is 'Fried'.
 
-SELECT LOWER(SUBSTRING(MsStaff.StaffName, 1, CHARINDEX(' ', MsStaff.StaffName) - 1)) AS 'Name',
+SELECT (SUBSTRING(MsStaff.StaffName, 1, CHARINDEX(' ', MsStaff.StaffName) - 1)) AS 'Name',
 FoodCategory,
-AVG(PurchaseDetailFood.FoodQtyPurchase) AS 'Average Total Food Purchase',
-SUM(PurchaseDetailFood.FoodQtyPurchase) AS [Total Food Purchase]
+AVG(pd.FoodQtyPurchase) AS 'Average Total Food Purchase',
+SUM(pd.FoodQtyPurchase) AS [Total Food Purchase]
 FROM MsStaff
 JOIN PurchaseHeader ON PurchaseHeader.StaffID = MsStaff.StaffID
-JOIN PurchaseDetailFood ON PurchaseDetailFood.PurchaseID = PurchaseHeader.PurchaseID
-JOIN MsFood ON MsFood.FoodID = PurchaseDetailFood.FoodID
-WHERE PurchaseDetailFood.FoodQtyPurchase > 2 AND MsFood.FoodCategory = 'Fried'
+JOIN PurchaseDetail pd ON pd.PurchaseID = PurchaseHeader.PurchaseID
+JOIN MsFood ON MsFood.FoodID = pd.FoodID
+WHERE pd.FoodQtyPurchase > 2 AND MsFood.FoodCategory = 'Fried'
 GROUP BY StaffName, FoodCategory
 
 -- 5 --
