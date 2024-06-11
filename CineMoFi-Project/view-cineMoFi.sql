@@ -67,14 +67,16 @@ GROUP BY StaffName, FoodCategory
 -- for every 'Soft Drink' or 'Herbal' drink category in a single transaction that has more than 1 
 -- quantity sold.
 
-SELECT DISTINCT th.TransactionID, DATEADD(YEAR, 1, TransactionDate) AS [Drink Transaction Forecast], CONCAT(DrinkQtySales, ' Cup') AS [Drink Quantity]
-FROM TransactionDetail td
-	JOIN TransactionHeader th ON td.TransactionID = th.TransactionID
-	JOIN (SELECT td.DrinkID, DrinkCategory AS Drink
-		FROM TransactionDetail td
-			JOIN TransactionHeader th ON td.TransactionID = th.TransactionID 
-			JOIN MsDrink md ON td.DrinkID = md.DrinkID
-			WHERE DrinkCategory IN ('Herbal', 'Soft Drink')) AS CategoryDrink ON td.DrinkID = CategoryDrink.DrinkID
+SELECT th.TransactionID,
+DATEADD(YEAR, 1, TransactionDate) AS [Drink Transaction Forecast],
+CONCAT(DrinkQtySales, ' Cup') AS [Drink Quantity]
+FROM TransactionHeader th
+JOIN TransactionDetail td ON th.TransactionID = td.TransactionID,
+	(SELECT DrinkID
+		FROM MsDrink
+		WHERE DrinkCategory IN ('Herbal' , 'Soft Drink')
+	) AS CategoryDrink
+WHERE td.DrinkID IN (CategoryDrink.DrinkID)
 
 -- 6 --	
 -- Display StaffID, Transaction Date (Obtained from Converting the TransactionDate to 'dd Mon 
